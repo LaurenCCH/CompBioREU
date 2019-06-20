@@ -7,45 +7,29 @@
 %times
 function [log_liklihood_t_values_1, list_probs] = likelihood_approx(t,q0)
 % recalling phospho_times to calculate the times for q0 
-bw=.1;
-n=10000;
+bw=.01;
+n=1000;
 [t0] = phospho_times(q0,.01,n);
 %This code creates a histogram and then takes the bin counts and turns 
 %them into probabilities
 histogram(t0,'BinWidth', bw,'Normalization','pdf');
 [N,edges] = histcounts(t0,'BinWidth', bw,'Normalization', 'probability');
 N_1 = N./bw;
-sum(N)
-saveas(gcf,fprintf('likelihood_plot_approx%f', round(n)))
+
+%saveas(gcf,fprintf('likelihood_plot_approx%f', round(n)))
 %This code take the bin counts and turns them into probabilities
 
-%This initializes A1 with zeros
-A1=zeros(1,((round(edges(end))*3)+1));
-r=0;
-b=1;
-%This fills A1 with the time boundaries and the associated probabilities
-% for a=1:(edges(end))
-% 
-% 
-%    
-%     
-%     A1(a)=r;
-%     
-%     r=r+bw;
-%     b=b+1;
-%     if b>length(N)
-%     break
-%     end
-%     
-% end
-
 t_1=sort(t);
-N_1
+
 list_probs=zeros(1,length(t));
 
 for d=1:length(t)
-    index_t = ceil(t_1(d)/bw);
+    if t_1(d)<edges(1) || t_1(d)>edges(length(edges))
+        list_probs(d)=0;
+    else
+    index_t = floor(t_1(d)/bw)+1;
     list_probs(d) = N_1(index_t);
+    end
 end
     
     
@@ -78,8 +62,6 @@ end
 for m=1:length(list_probs)
     if list_probs(m)==0
         list_probs(m)=(1/(n*10));
-    else
-        list_probs(m)=list_probs(m);
     end
 end
 %list_probs

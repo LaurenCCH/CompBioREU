@@ -20,7 +20,7 @@ p = @(t,q)(diag(q) * exp(-q' * t));
 %end
 
 %q = @(t)(1/t)
-fprintf("q is %f\n",q);
+%fprintf("q is %f\n",q);
 l=sum(log(p(t,q)),2);
 size(l);
 

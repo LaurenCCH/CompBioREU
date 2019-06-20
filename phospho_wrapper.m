@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,Max_LL,q_LL] = phospho_wrapper(q,n)
+function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,q_LL] = phospho_wrapper(q,n)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -16,17 +16,19 @@ timestep=.01;
 [t]=phospho_times(q,timestep,n);
 
 MLE_q_analytic=1/mean(t);
+Max_LL=likelihood(t,MLE_q_analytic);
 q0 = q;
 b = 0;
 A = -1;
 %We have the constraint A*q <= b, i.e. q>=0.
 negLL=@(q)-1*likelihood(t,q);
 options=optimset('MaxFunEvals',1000,'MaxIter',1000,'Display','iter');
-[MLE_q_numeric] = fmincon(negLL,q0,A,b,[],[],[],[],[],options);
+[MLE_q_numeric,numeric_LL] = fmincon(negLL,q0,A,b,[],[],[],[],[],options);
+numeric_LL=-numeric_LL;
+negLL_approx=@(q)-1*likelihood_approx(t,q);
+[MLE_q_approx,approx_LL] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
+approx_LL=-approx_LL;
 
-%,LL_numeric
-
-Max_LL=likelihood(t,MLE_q_analytic);
 q_LL=likelihood(t,q);
 
 q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
