@@ -6,11 +6,11 @@
 %calculate the probability of observing a single event within a range of
 %times
 function [log_liklihood_t_values_1, list_probs] = likelihood_approx(t,q0)
-% recalling phospho_times to calculate the times for q0 
-bw=.01;
+% recalling phospho_times to calculate the times for q0
+bw=.1;
 n=1000;
 [t0] = phospho_times(q0,.01,n);
-%This code creates a histogram and then takes the bin counts and turns 
+%This code creates a histogram and then takes the bin counts and turns
 %them into probabilities
 histogram(t0,'BinWidth', bw,'Normalization','pdf');
 [N,edges] = histcounts(t0,'BinWidth', bw,'Normalization', 'probability');
@@ -31,11 +31,11 @@ for d=1:length(t)
     list_probs(d) = N_1(index_t);
     end
 end
-    
-    
-    
    
-    
+   
+   
+   
+   
 %     while (t_1(d)>=A1(c+1) && c+1<=length(N))
 %        % if c>length(A1)
 %         %break
@@ -46,22 +46,22 @@ end
 %         end
 %     end
 %     list_probs(d)=N(c);
-        
-    
+       
+   
 
 
-        
-        
-    
+       
+       
+   
 %This code formats the data into an easily readable format
 %formatSpec = 'The probability for %2.4f <t< %2.4f is %1.5f \n' ;
 %fprintf(formatSpec,A1)  
-    
+   
 
 %log_liklihood_t_values = sum(log(list_probs));
 for m=1:length(list_probs)
     if list_probs(m)==0
-        list_probs(m)=(1/(n*10));
+        list_probs(m)=(1/(n*100));
     end
 end
 %list_probs
@@ -69,3 +69,7 @@ log_liklihood_t_values_1 = sum(log(list_probs));
 
 
 end
+
+
+	
+	

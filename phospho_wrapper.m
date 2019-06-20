@@ -1,6 +1,6 @@
-function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,q_LL] = phospho_wrapper(q,n)
-%generate a set of synthetic data (t) for the first event (phosphorylation) 
-%times for a Poisson process, given the provided rate, q, 
+function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,q_LL, numeric_LL_true, approx_LL_true] = phospho_wrapper(q,n)
+%generate a set of synthetic data (t) for the first event (phosphorylation)
+%times for a Poisson process, given the provided rate, q,
 % and over a provided number of trials, n, and calculate the analytic MLE
 % of q from that synthetic data and also calculate the numeric MLE
 % of q and also return the log likelihood values of both estimators of q.
@@ -29,9 +29,17 @@ negLL_approx=@(q)-1*likelihood_approx(t,q);
 [MLE_q_approx,approx_LL] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
 approx_LL=-approx_LL;
 
+numeric_LL_true=likelihood(t, MLE_q_numeric);
+
+approx_LL_true=likelihood(t,MLE_q_approx);
+
 q_LL=likelihood(t,q);
 
 q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
 plot(q_values,likelihood(t,q_values));
 saveas(gcf,'likelihood_plot');
 end
+	
+
+	
+	

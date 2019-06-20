@@ -1,10 +1,9 @@
-
 function [l] = likelihood(t,q)
 %q is a row vector of rates
 %t is a row vector of times
 p = @(t,q)(diag(q) * exp(-q' * t));
 
-% this for loop calculates the likelehood 
+% this for loop calculates the likelehood
 % of the data
 %L = 1
 %for i=1 : n
@@ -28,9 +27,3 @@ size(l);
 
 
 
-
-
-
-end
-    
-    
