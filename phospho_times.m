@@ -5,7 +5,10 @@ function [t]=phospho_times(q,h,n)
 %length h is poisson distributed with m=1 (the number of events is 1).
 hold off
 
-p=@(q,h,m)((exp(-q*h).*(q*h).^m)/factorial(m));
+%memoizedFactorial = memoize(@factorial);
+
+%p=@(q,h,m)((exp(-q*h).*(q*h).^m)/memoizedFactorial(m));
+%p=@(q,h,m)(q*h);
 t=zeros(1,n);
 %m is the number of phosphorylations.  It must be set to 1.
 m=1;
@@ -13,7 +16,8 @@ for s=1 : n
     
     %r=rand;
     i=0;
-    while rand > p(q,h,m)
+    %while rand > p(q,h,m)
+    while rand > q*h
         i=i+1;
         %r=rand;
     end

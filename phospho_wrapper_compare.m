@@ -26,17 +26,21 @@ options=optimset('MaxFunEvals',1000,'MaxIter',1000,'Display','iter');
 [MLE_q_numeric,numeric_LL] = fmincon(negLL,q0,A,b,[],[],[],[],[],options);
 numeric_LL=-numeric_LL;
 num_sims=[100, 1000, 10000];
+%num_sims=[100, 1000];
 bw = [0.1,0.01];
 scale_small_probs=[10,100];
-MLE_q_approx=zeros(3,2,2);
-approx_LL=zeros(3,2,2);
-for i=1:3
+MLE_q_approx=zeros(length(num_sims),2,2);
+approx_LL=zeros(length(num_sims),2,2);
+for i=1:length(num_sims)
+    
+    fprintf("%f percent complete", 100.0*i/length(num_sims));
+    
     for j=1:2
         for k=1:2
-            
-negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),1/(num_sims(i)*scale_small_probs(k)));
-[MLE_q_approx(i,j,k),approx_LL(i,j,k)] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
-approx_LL(i,j,k)=-approx_LL(i,j,k);
+            sth = 1/(num_sims(i)*scale_small_probs(k));           
+            negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),sth);
+            [MLE_q_approx(i,j,k),approx_LL(i,j,k)] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
+            approx_LL(i,j,k)=-approx_LL(i,j,k);
         end
     end
 end
