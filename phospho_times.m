@@ -1,4 +1,4 @@
-function [t]=phospho_times(q,h,data_nums)
+function [t]=phospho_times(q,h,n)
 %This code tracks the time it takes proteins to be phosphorylated.
 %n is the number of protiens that are tracked
 %we assume the probability a protein is phosphorylated over a time step of
@@ -9,10 +9,12 @@ hold off
 
 %p=@(q,h,m)((exp(-q*h).*(q*h).^m)/memoizedFactorial(m));
 %p=@(q,h,m)(q*h);
-t=zeros(1,data_nums(r));
+
+
+t=zeros(1,n);
 %m is the number of phosphorylations.  It must be set to 1.
 m=1;
-for s=1 : data_nums(r)
+for s=1 : n
     
     %r=rand;
     i=0;
