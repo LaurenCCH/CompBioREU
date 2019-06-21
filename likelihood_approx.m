@@ -12,7 +12,7 @@ n=1000;
 [t0] = phospho_times(q0,.01,n);
 %This code creates a histogram and then takes the bin counts and turns
 %them into probabilities
-histogram(t0,'BinWidth', bw,'Normalization','pdf');
+histogram(t0,'BinWidth', bw,'Normalization','pdf')
 [N,edges] = histcounts(t0,'BinWidth', bw,'Normalization', 'probability');
 N_1 = N./bw;
 
@@ -61,7 +61,7 @@ end
 %log_liklihood_t_values = sum(log(list_probs));
 for m=1:length(list_probs)
     if list_probs(m)==0
-        list_probs(m)=(1/(n*100));
+        list_probs(m)=(1/(n*10));
     end
 end
 %list_probs
