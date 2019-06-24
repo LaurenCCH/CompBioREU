@@ -5,7 +5,7 @@
 %This code take a time and a q as inputs and uses the generated data to
 %calculate the probability of observing a single event within a range of
 %times
-function [log_liklihood_t_values_1, list_probs] = likelihood_approx(t,q0,num_sims, data_nums, bw,sth, n);
+function [log_liklihood_t_values_1, list_probs] = likelihood_approx(t,q0,num_sims,bw,sth)
 
 % recalling phospho_times to calculate the times for q0
 bw=.1;
@@ -27,8 +27,12 @@ list_probs=zeros(1,length(t));
 for d=1:length(t)
     if t_1(d)<edges(1) || t_1(d)>edges(length(edges))
         list_probs(d)=0;
+    
     else
     index_t = floor(t_1(d)/bw)+1;
+        if index_t>length(N_1)
+            break
+        end
     list_probs(d) = N_1(index_t);
     end
 end

@@ -8,7 +8,7 @@ function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,
 % MLE_q_analytic represents the analytic MLE of q
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
-data_nums = [100,250, 500, 750, 1000, 2500, 5000, 7500, 10000];
+%data_nums = [100,250, 500, 750, 1000, 2500, 5000, 7500, 10000];
 timestep=.01;
 %for r=1:length(data_nums)
    % n_new=data_nums(r);
@@ -18,7 +18,7 @@ timestep=.01;
 % this function returns the first phosphoralations times with n trials.
 % q represets the rate of phosphoralations.
     [t]=phospho_times(q,timestep,n);
-    
+   
     MLE_q_analytic=1/mean(t);
     Max_LL=likelihood(t,MLE_q_analytic);
     q0 = q;
