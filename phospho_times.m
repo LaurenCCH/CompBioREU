@@ -10,23 +10,19 @@ hold off
 %p=@(q,h,m)((exp(-q*h).*(q*h).^m)/memoizedFactorial(m));
 %p=@(q,h,m)(q*h);
 
-
+p = q*h;
 t=zeros(1,n);
 %m is the number of phosphorylations.  It must be set to 1.
 m=1;
 for s=1 : n
-    
     %r=rand;
     i=0;
     %while rand > p(q,h,m)
-    while rand > q*h
+    while rand > p
         i=i+1;
         %r=rand;
     end
-   
     t(s) = i*h;
-    
-   
 end
 histogram(t,'Normalization','pdf')
 hold on
