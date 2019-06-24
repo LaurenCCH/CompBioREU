@@ -1,27 +1,20 @@
+% This function returns the loglikelihood of the parameter q given the data t.
+% Here t is a vector of times for the first event of a process.
+% We assume the process is a poisson process. 
+% Under these assumptions t is known to follow an exponential distribution
+
+% q is a row vector of rates
+% t is a row vector of first event times
 function [l] = likelihood(t,q)
-%q is a row vector of rates
-%t is a row vector of times
+
+% p(t,q) represents the probability distribution of t
 p = @(t,q)(diag(q) * exp(-q' * t));
 
-% this for loop calculates the likelehood
-% of the data
-%L = 1
-%for i=1 : n
-%    L = L * p(t,q)
-%    return L
-%end
-
-
-%t=0
-%for i=1 : n
-%   t = t + i
-%   return t
-%end
-
-%q = @(t)(1/t)
-%fprintf("q is %f\n",q);
+% l is what we are trying to return in this function which is the
+% loglikelihood by summing the log values of p. 
 l=sum(log(p(t,q)),2);
-size(l);
+
+end
 
 
 

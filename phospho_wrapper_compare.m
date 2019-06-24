@@ -9,7 +9,7 @@ function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,numeric_LL,Max_LL
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
-gofast_mode=1;
+gofast_mode=0;
 
 if(gofast_mode==1)
     
