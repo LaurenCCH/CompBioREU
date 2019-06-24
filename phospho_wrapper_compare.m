@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,q_LL] = phospho_wrapper_compare(q, data_nums)
+function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,q_LL] = phospho_wrapper_compare(q,n)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -10,15 +10,15 @@ function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,
 % q_LL is the log likelihood of q
 data_nums = [100,250, 500, 750, 1000, 2500, 5000, 7500, 10000];
 timestep=.01;
-for r=1:length(data_nums)
-    n=data_nums(r);
-
+%for r=1:length(data_nums)
+   % n_new=data_nums(r);
+    
 %length of small time step for simulating phosphorylation
 
 % this function returns the first phosphoralations times with n trials.
 % q represets the rate of phosphoralations.
     [t]=phospho_times(q,timestep,n);
-
+    
     MLE_q_analytic=1/mean(t);
     Max_LL=likelihood(t,MLE_q_analytic);
     q0 = q;
@@ -39,8 +39,8 @@ for r=1:length(data_nums)
 
         fprintf("%f percent complete", 100.0*i/length(num_sims));
 
-        for j=1:2
-            for k=1:2
+        for j=1:length(bw)
+            for k=1:length(scale_small_probs)
                 sth = 1/(num_sims(i)*scale_small_probs(k));           
                 negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),sth);
                 [MLE_q_approx(i,j,k),approx_LL(i,j,k)] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
@@ -55,4 +55,4 @@ for r=1:length(data_nums)
     plot(q_values,likelihood(t,q_values));
     saveas(gcf,'likelihood_plot');
  end
- end
+ 

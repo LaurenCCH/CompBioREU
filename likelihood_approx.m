@@ -5,12 +5,12 @@
 %This code take a time and a q as inputs and uses the generated data to
 %calculate the probability of observing a single event within a range of
 %times
-function [log_liklihood_t_values_1, list_probs] = likelihood_approx(t,q0,num_sims, data_nums, bw,sth);
+function [log_liklihood_t_values_1, list_probs] = likelihood_approx(t,q0,num_sims, data_nums, bw,sth, n);
 
 % recalling phospho_times to calculate the times for q0
 bw=.1;
-%n=1000;
-[t0] = phospho_times(q0,.01,data_nums);
+n=1000;
+[t0] = phospho_times(q0,.01,n);
 %This code creates a histogram and then takes the bin counts and turns
 %them into probabilities
 histogram(t0,'BinWidth', bw,'Normalization','pdf')
@@ -62,7 +62,7 @@ end
 %log_liklihood_t_values = sum(log(list_probs));
 for m=1:length(list_probs)
     if list_probs(m)==0
-        list_probs(m)=(1/(data_nums(r)*10));
+        list_probs(m)=(1/(n*10));
     end
 end
 %list_probs
