@@ -8,7 +8,24 @@ function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx,numeric_LL,Max_LL,approx_LL,
 % MLE_q_analytic represents the analytic MLE of q
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
-data_nums = [100,250,500, 750, 1000, 2500, 5000, 7500, 10000];
+
+gofast_mode=1;
+
+if(gofast_mode==1)
+    data_nums = [100,250];
+    num_sims=[100, 250];
+    bw = [0.1, .075];
+    scale_small_probs=[10, 25];
+else
+    % This is the go slow, full mode
+    data_nums = [100,250,500, 750, 1000, 2500, 5000, 7500, 10000];
+    num_sims=[100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000];
+    %num_sims=[100, 1000];
+    bw = [0.1, .075, .05, .025, 0.01];
+    scale_small_probs=[10, 25, 50, 75, 100];
+end
+
+
 timestep=.01;
 for n_index=1:length(data_nums)
     n=data_nums(n_index);
@@ -30,10 +47,6 @@ for n_index=1:length(data_nums)
     options=optimset('MaxFunEvals',1000,'MaxIter',1000,'Display','iter');
     [MLE_q_numeric,numeric_LL] = fmincon(negLL,q0,A,b,[],[],[],[],[],options);
     numeric_LL=-numeric_LL;
-    num_sims=[100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000];
-    %num_sims=[100, 1000];
-    bw = [0.1, .075, .05, .025, 0.01];
-    scale_small_probs=[10, 25, 50, 75, 100];
     MLE_q_approx=zeros(length(num_sims),length(bw),length(scale_small_probs));
     approx_LL=zeros(length(num_sims),length(bw),length(scale_small_probs));
     for i=1:length(num_sims)
