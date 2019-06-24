@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,numeric_LL,Max_LL,approx_LL_simulation,q_LL] = phospho_wrapper_compare(q)
+function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,numeric_LL,Max_LL,approx_LL_simulation,q_LL, q_mom_final] = phospho_wrapper_compare(q)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -109,7 +109,7 @@ end
 
 % The loglikelihood of the true parameter q
 q_LL=likelihood(t,q);
-
+q_mom_final=method_of_moments(t);
 % Prepare the domain values, q_values for which we will plot the
 % loglikelihoods
 q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
