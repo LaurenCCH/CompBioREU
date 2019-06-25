@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,numeric_LL,Max_LL,approx_LL_simulation,q_LL, q_mom_final] = phospho_wrapper_compare(q)
+function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,mom_q,numeric_LL,Max_LL,approx_LL_simulation,q_LL,mom_LL] = phospho_wrapper_compare(q)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -9,24 +9,29 @@ function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,numeric_LL,Max_LL
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
-gofast_mode=0;
+gofast_mode=1;
+
+% Make sure that the timestep, called h in other places, is always
+% infintestimal compared to our provided value for q
+timestep=1/(q*100);
 
 if(gofast_mode==1)
     
     % These represent the number of samples, the number of t values we
     % generate
-    data_nums = [100,250];
+    data_nums = [100,1000];
     
     % These represetn the number of simulations that we will run to
     % approximate the pdf.
-    num_sims=[100, 250];
+    num_sims=[100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000];
     
     % These represent the bin widths for approximating the pdf as a
-    % histogram
-    bw = [0.1, .075];
+    % histogram. The binwidth should be larger than the
+    % inintesimal timestep used to simulate the process.
+    bw = [timestep*10, timestep*100];
     
     % These scale our q values
-    scale_small_probs=[10, 25];
+    scale_small_probs=[10, 100];
 else
     % This is the go slow, full mode
     data_nums = [100,250,500, 750, 1000, 2500, 5000, 7500, 10000];
@@ -35,9 +40,7 @@ else
     scale_small_probs=[10, 25, 50, 75, 100];
 end
 
-% Make sure that the timestep, called h in other places, is always
-% infintestimal compared to our provided value for q
-timestep=1/(q*100);
+
 
 % Loop through our desired number of samples, indexed by n_index,
 % data_nums(n_index)
@@ -109,12 +112,19 @@ end
 
 % The loglikelihood of the true parameter q
 q_LL=likelihood(t,q);
-q_mom_final=method_of_moments(t);
+
+%the estimate of q by the method of moments
+mom_q=method_of_moments(t);
+%get the loglikelihood of mom_q
+mom_LL=likelihood(t,mom_q);
+
+
 % Prepare the domain values, q_values for which we will plot the
 % loglikelihoods
 q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
 
 % Plot and save
+compare_plots;
 plot(q_values,likelihood(t,q_values));
 saveas(gcf,'likelihood_plot');
 end
