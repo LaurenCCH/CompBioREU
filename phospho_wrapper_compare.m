@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,mom_q,numeric_LL,Max_LL,approx_LL_simulation,q_LL,mom_LL] = phospho_wrapper_compare(q)
+function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,mom_q,numeric_LL,Max_LL,approx_LL_simulation,q_LL,mom_LL, compare_plots_wrapper] = phospho_wrapper_compare(q)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -124,7 +124,7 @@ mom_LL=likelihood(t,mom_q);
 q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
 
 % Plot and save
-compare_plots;
+compare_plots(MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic);
 plot(q_values,likelihood(t,q_values));
 saveas(gcf,'likelihood_plot');
 end
