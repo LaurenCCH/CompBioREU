@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,MLE_q_approx_simulation,mom_q,numeric_LL,Max_LL,approx_LL_simulation,q_LL,mom_LL, compare_plots_wrapper] = phospho_wrapper_compare(q)
+function [MLE_q_numeric,MLE_q_analytic,avg_MLE_q_approx_simulation,mom_q,numeric_LL,Max_LL,avg_approx_LL_simulation,q_LL,mom_LL,avg_ML_error,data_nums,bw,scale_small_probs,num_sims] = phospho_wrapper_compare(q)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -32,6 +32,9 @@ if(gofast_mode==1)
     
     % These scale our q values
     scale_small_probs=[10, 100];
+    
+    num_samples=ceiling(10,000./num_sims);
+    
 else
     % This is the go slow, full mode
     data_nums = [100,250,500, 750, 1000, 2500, 5000, 7500, 10000];
@@ -40,7 +43,11 @@ else
     scale_small_probs=[10, 25, 50, 75, 100];
 end
 
-
+% Preallocate the matrices holding the MLE and associated LL for each
+    % simulation run.
+    avg_MLE_q_approx_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+    avg_approx_LL_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+    avg_ML_error=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
 
 % Loop through our desired number of samples, indexed by n_index,
 % data_nums(n_index)
@@ -73,14 +80,12 @@ for n_index=1:length(data_nums)
     % back.
     numeric_LL=-numeric_LL;
     
-    % Preallocate the matrices holding the MLE and associated LL for each
-    % simulation run.
-    MLE_q_approx_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs));
-    approx_LL_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs));
+    
     
     % Loop through our desired number of simulations, indexed by i,
     % num_sims(i)
-    for i=1:length(num_sims)
+    
+   
 
         % Loop through our desired bin widths, indexed by j, bw(j)
         for j=1:length(bw)
@@ -88,6 +93,9 @@ for n_index=1:length(data_nums)
             % Loop through our desired small probability scaling factors,
             % indexed by k, scale_small_probs(k)
             for k=1:length(scale_small_probs)
+                
+                 for i=1:length(num_sims)
+                    for num_samp_index=1:num_samples(i)
                 
                 % Because we can underflow the probability, we need to
                 % sometimes replace the zero value with some degenerate
@@ -100,11 +108,22 @@ for n_index=1:length(data_nums)
                 negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),degenerate_probability);
                 
                 % Do the optimization and return the simulation MLE and LL
-                [MLE_q_approx_simulation(i,j,k),approx_LL_simulation(i,j,k)] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
+                [q_sample,LL_sample] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
+                LL_sample=-LL_sample;
+                e_sample=(abs(q_sample-(MLE_q_analytic)));
+                avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)+e_sample;
+                
+                avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)+q_sample;
+                avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)+LL_sample;
                 
                 % Remember that we have to flip the LL back becaus the
                 % optimizer minimizes!
-                approx_LL_simulation(i,j,k)=-approx_LL_simulation(i,j,k);
+                
+                    end
+                    avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)/num_samples(i);
+                    avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)/num_samples(i);
+                    avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)/num_samples(i);
+            
             end
         end
     end
@@ -124,8 +143,8 @@ mom_LL=likelihood(t,mom_q);
 q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
 
 % Plot and save
-compare_plots(MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic);
+%compare_plots(MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic);
 plot(q_values,likelihood(t,q_values));
-saveas(gcf,'likelihood_plot');
+%saveas(gcf,'likelihood_plot');
 end
  
