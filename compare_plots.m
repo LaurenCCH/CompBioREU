@@ -1,4 +1,4 @@
-function[]=compare_plots(avg_MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic)
+function[]=compare_plots(avg_MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic, sample_error_variance)
 %This function loops over ordered triples (data_nums,bw,scale_small_probs)and
 %plots num_sims verusus abs(MLE_q_approx_simulation-MLE_q_analytic).
 
@@ -14,7 +14,16 @@ for i=1:length(bw)
             title(("Num_sims versus error for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
             xlabel(('Num_sims') , 'Interpreter', 'none')
             ylabel('ML_error') 
-           
+            
+            hold on
+            
+            plot(num_sims,sample_error_variance(:,i,j,k),'o')
+            string_num_sims=num2str(num_sims);
+            title(("Num_sims versus error variance for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
+            xlabel(('Num_sims') , 'Interpreter', 'none')
+            ylabel('Error variance') 
+            
+            
         end
     end
 end
