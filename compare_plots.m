@@ -6,9 +6,9 @@ avg_ML_error=zeros(length(num_sims),length(bw),length(scale_small_probs),length(
 for i=1:length(bw)
     for j=1:length(scale_small_probs)
         for k=1:length(data_nums)
-           
+            e =(avg_MLE_q_approx_simulation(:,i,j,k));
             avg_ML_error(:,i,j,k)=(abs(avg_MLE_q_approx_simulation(:,i,j,k)-(MLE_q_analytic)));
-            [p,k_conv,SSE]=conv_rate(num_sims, avg_MLE_q_approx_simulation(:,i,j,k));
+            [p,k_conv,SSE]=conv_rate(num_sims, e);
             
             
             
