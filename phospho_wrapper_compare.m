@@ -23,7 +23,7 @@ if(gofast_mode==1)
     
     % These represetn the number of simulations that we will run to
     % approximate the pdf.
-    num_sims=[100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000];
+    num_sims=(100:100:10000);
     
     % These represent the bin widths for approximating the pdf as a
     % histogram. The binwidth should be larger than the
@@ -33,7 +33,8 @@ if(gofast_mode==1)
     % These scale our q values
     scale_small_probs=[10, 100];
     
-    num_samples=ceil(10000./num_sims);
+    %num_samples=ceil(10000./num_sims);
+    num_samples=100*ones(size(num_sims));
     
 else
     % This is the go slow, full mode
@@ -121,15 +122,15 @@ for n_index=1:length(data_nums)
                     % Remember that we have to flip the LL back becaus the
                     % optimizer minimizes!
 
-                        end
+                    end
                         avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)/num_samples(i);
                         avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)/num_samples(i);
                         avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)/num_samples(i);
 
                         sample_error_variance(i,j,k,n_index)=(sum_e_sample_squared(i,j,k,n_index)/num_samples(i))-((avg_ML_error(i,j,k,n_index))^2);
+                 end
             end
         end
-    end
 end
 
 % The loglikelihood of the true parameter q
