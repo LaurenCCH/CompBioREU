@@ -11,17 +11,17 @@ for i=1:length(bw)
             set(figure,'DefaultFigureWindowStyle','docked')
             plot(num_sims,avg_ML_error(:,i,j,k),'o')
             string_num_sims=num2str(num_sims);
-            title(("Num_sims versus error for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
+            title(("Num_sims versus error(blue) and variance(orange) for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
             xlabel(('Num_sims') , 'Interpreter', 'none')
-            ylabel('ML_error') 
+            ylabel('MLE error and MLE variance') 
             
             hold on
             
             plot(num_sims,sample_error_variance(:,i,j,k),'o')
-            string_num_sims=num2str(num_sims);
-            title(("Num_sims versus error variance for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
-            xlabel(('Num_sims') , 'Interpreter', 'none')
-            ylabel('Error variance') 
+            %string_num_sims=num2str(num_sims);
+            %title(("Num_sims versus error variance for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
+            %xlabel(('Num_sims') , 'Interpreter', 'none')
+            %ylabel('MLE error and MLE variance') 
             
             
         end

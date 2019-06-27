@@ -18,7 +18,7 @@ for s=1 : n
     %r=rand;
     i=0;
     %while rand > p(q,h,m)
-    while rand > p
+    while rand > q*h
         i=i+1;
         %r=rand;
     end
