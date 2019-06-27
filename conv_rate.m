@@ -1,15 +1,16 @@
-function[p,k, SSE]=conv_rate(num_sims, avg_MLE_q_approx_simulation(:,i,j,k))
-e=avg_MLE_q_approx_simulation(:,i,j,k);
+function[p,k_conv, SSE]=conv_rate(num_sims, e)
+%e=avg_MLE_q_approx_simulation(:,i,j,k);
 %for m=1:length(num_sims)
 
 
     y=log(1/e);
-    x=log(num_sims(m));
-    conv_fit = polyfit(x,y,1);
-    p=conv_fit(1);
-    k=e^conv_fit(2);
-    y_hat=polyval(conv_fit,x);
+    x=log(num_sims);
+    [p,c] = polyfit(x,y,1);
+    %p=conv_fit(1);
+    k_conv=exp(c);
+    y_hat=polyval([p,k_conv],x);
     SSE=sum(y_hat-y).^2;
+%end
 end
    
     

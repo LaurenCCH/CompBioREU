@@ -8,7 +8,7 @@ for i=1:length(bw)
         for k=1:length(data_nums)
            
             avg_ML_error(:,i,j,k)=(abs(avg_MLE_q_approx_simulation(:,i,j,k)-(MLE_q_analytic)));
-            [p,k,SSE]=conv_rate(num_sims, avg_MLE_q_approx_simulation(:,i,j,k));
+            [p,k_conv,SSE]=conv_rate(num_sims, avg_MLE_q_approx_simulation(:,i,j,k));
             
             
             
@@ -30,7 +30,7 @@ for i=1:length(bw)
             
             hold on
             
-            plot(num_sims, (k/num_sims)^p)
+            plot(num_sims, (k_conv/num_sims)^p)
             SSE
             
         end
