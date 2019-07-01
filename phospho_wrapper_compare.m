@@ -23,7 +23,7 @@ if(gofast_mode==1)
     
     % These represetn the number of simulations that we will run to
     % approximate the pdf.
-    num_sims=(100:100:10000);
+    num_sims=(100:100:300);
     
     % These represent the bin widths for approximating the pdf as a
     % histogram. The binwidth should be larger than the
@@ -34,23 +34,24 @@ if(gofast_mode==1)
     scale_small_probs=[10, 100];
     
     %num_samples=ceil(10000./num_sims);
-    num_samples=100*ones(size(num_sims));
+    num_samples=10*ones(size(num_sims));
     
 else
     % This is the go slow, full mode
     data_nums = [100,250,500, 750, 1000, 2500, 5000, 7500, 10000];
-    num_sims=[100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000];
-    bw = [0.1, .075, .05, .025, 0.01];
+    num_sims=(100:100:10000);
+    bw = [timestep*10, timestep*100];
     scale_small_probs=[10, 25, 50, 75, 100];
+    num_samples=100*ones(size(num_sims));
 end
 
 % Preallocate the matrices holding the MLE and associated LL for each
-    % simulation run.
-    avg_MLE_q_approx_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
-    avg_approx_LL_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
-    avg_ML_error=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
-    sum_e_sample_squared=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
-    sample_error_variance=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+% simulation run.
+avg_MLE_q_approx_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+avg_approx_LL_simulation=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+avg_ML_error=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+sum_e_sample_squared=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
+sample_error_variance=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
 % Loop through our desired number of samples, indexed by n_index,
 % data_nums(n_index)
 for n_index=1:length(data_nums)
@@ -89,16 +90,16 @@ for n_index=1:length(data_nums)
     
    
 
-        % Loop through our desired bin widths, indexed by j, bw(j)
-        for j=1:length(bw)
-            
-            % Loop through our desired small probability scaling factors,
-            % indexed by k, scale_small_probs(k)
-            for k=1:length(scale_small_probs)
-                
-                 for i=1:length(num_sims)
-                    for num_samp_index=1:num_samples(i)
-                
+    % Loop through our desired bin widths, indexed by j, bw(j)
+    for j=1:length(bw)
+
+        % Loop through our desired small probability scaling factors,
+        % indexed by k, scale_small_probs(k)
+        for k=1:length(scale_small_probs)
+
+             for i=1:length(num_sims)
+                for num_samp_index=1:num_samples(i)
+
                     % Because we can underflow the probability, we need to
                     % sometimes replace the zero value with some degenerate
                     % nonzero probability to prevent the loglikeilhood from
@@ -117,20 +118,20 @@ for n_index=1:length(data_nums)
 
                     avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)+q_sample;
                     avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)+LL_sample;
-                    
+
                     sum_e_sample_squared(i,j,k,n_index)=sum_e_sample_squared(i,j,k,n_index) +((e_sample)^2);
                     % Remember that we have to flip the LL back becaus the
                     % optimizer minimizes!
 
-                    end
-                        avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)/num_samples(i);
-                        avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)/num_samples(i);
-                        avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)/num_samples(i);
+                end
+                avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)/num_samples(i);
+                avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)/num_samples(i);
+                avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)/num_samples(i);
 
-                        sample_error_variance(i,j,k,n_index)=(sum_e_sample_squared(i,j,k,n_index)/num_samples(i))-((avg_ML_error(i,j,k,n_index))^2);
-                 end
-            end
+                sample_error_variance(i,j,k,n_index)=(sum_e_sample_squared(i,j,k,n_index)/num_samples(i))-((avg_ML_error(i,j,k,n_index))^2);
+             end
         end
+    end
 end
 
 % The loglikelihood of the true parameter q
@@ -140,7 +141,6 @@ q_LL=likelihood(t,q);
 mom_q=method_of_moments(t);
 %get the loglikelihood of mom_q
 mom_LL=likelihood(t,mom_q);
-
 
 % Prepare the domain values, q_values for which we will plot the
 % loglikelihoods

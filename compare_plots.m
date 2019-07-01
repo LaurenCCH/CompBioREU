@@ -1,38 +1,21 @@
-function[]=compare_plots(avg_MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic, sample_error_variance)
+function[]=compare_plots(avg_ML_error,sample_error_variance,num_sims,data_nums, bw, scale_small_probs)
 %This function loops over ordered triples (data_nums,bw,scale_small_probs)and
 %plots num_sims verusus abs(MLE_q_approx_simulation-MLE_q_analytic).
 
-avg_ML_error=zeros(length(num_sims),length(bw),length(scale_small_probs),length(data_nums));
 for i=1:length(bw)
     for j=1:length(scale_small_probs)
         for k=1:length(data_nums)
-            e =(avg_MLE_q_approx_simulation(:,i,j,k));
-            avg_ML_error(:,i,j,k)=(abs(avg_MLE_q_approx_simulation(:,i,j,k)-(MLE_q_analytic)));
-            [p,k_conv,SSE]=conv_rate(num_sims, e);
-            
-            
-            
+            [p,k_const,SSE]=convergence_rate(num_sims,avg_ML_error(:,i,j,k));
             set(figure,'DefaultFigureWindowStyle','docked')
+            hold on
             plot(num_sims,avg_ML_error(:,i,j,k),'o')
-            string_num_sims=num2str(num_sims);
-            title(("Num_sims versus error(blue) and variance(orange) for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
+            title(sprintf("Num_sims versus average error and variance for\nbw=%f\nscale_small_probs=%f\ndata_nums=%f",bw(i) ,scale_small_probs(j) , data_nums(k)), 'Interpreter', 'none');
             xlabel(('Num_sims') , 'Interpreter', 'none')
             ylabel('MLE error and MLE variance') 
-            
-            hold on
-            
-           
             plot(num_sims,sample_error_variance(:,i,j,k),'o')
-            %string_num_sims=num2str(num_sims);
-            %title(("Num_sims versus error variance for num_sims="+string_num_sims+" , bw=" +bw(i)+" , scale_small_probs="+scale_small_probs(j)+" , and data_nums="+data_nums(k)), 'Interpreter', 'none')  
-            %xlabel(('Num_sims') , 'Interpreter', 'none')
-            %ylabel('MLE error and MLE variance') 
-            
-            hold on
-            
-            plot(num_sims, (k_conv/num_sims)^p)
-            SSE
-            
+            plot(num_sims, (k_const./num_sims).^p)
+            annotation('textbox','String',sprintf("p=%f\nk\\_const=%f\nSSE=%f",p,k_const,SSE),'FitBoxToText','on');
+            legend('avg\_ML\_error','sample\_error\_variance','decay fit');
         end
     end
 end
