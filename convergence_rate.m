@@ -3,12 +3,14 @@ function[p,k, SSE]=convergence_rate(num_sims,avg_MLE_error)
 %grows.
 %reparameterizing into x and y for a linear relationship.
     
-y=log(1./avg_MLE_error)';
-x=log(num_sims);
+y=log(avg_MLE_error);
+x=log(num_sims)';
 params = polyfit(x,y,1);
-p=params(1);
+p=-params(1);
 c=params(2);
 k=exp(c);
-y_hat=polyval([p,c],x);
+y_hat=polyval([params(1),params(2)],x);
 SSE=sum((y_hat-y).^2);
+
+%plot(x,y,'*',x,y_hat,'o')
 end
