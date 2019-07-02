@@ -9,7 +9,7 @@ function [MLE_q_numeric,MLE_q_analytic,avg_MLE_q_approx_simulation,mom_q,numeric
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
-gofast_mode=1;
+gofast_mode=0;
 
 % Make sure that the timestep, called h in other places, is always
 % infintestimal compared to our provided value for q

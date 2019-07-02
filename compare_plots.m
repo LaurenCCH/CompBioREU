@@ -13,7 +13,8 @@ for i=1:length(bw)
             xlabel(('Num_sims') , 'Interpreter', 'none')
             ylabel('MLE error and MLE variance') 
             plot(num_sims,sample_error_variance(:,i,j,k),'o')
-            plot(num_sims, (k_const./num_sims).^p)
+            fine_range_mesh=num_sims(1):0.01:num_sims(end);
+            plot(fine_range_mesh, (k_const./fine_range_mesh).^p)
             annotation('textbox','String',sprintf("p=%f\nk\\_const=%f\nSSE=%f",p,k_const,SSE),'FitBoxToText','on');
             legend('avg\_ML\_error','sample\_error\_variance','decay fit');
         end
