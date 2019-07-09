@@ -128,16 +128,19 @@ for n_index=1:length(data_nums)
 
         % Loop through our desired small probability scaling factors,
         % indexed by k, scale_small_probs(k)
-        for k=1:length(scale_small_probs)
+        parfor k=1:length(scale_small_probs)
             
             % CREATE A STRUCT HERE
-                 data_cell{j,k,n_index} = struct();
+                 %data_cell{j,k,n_index} = struct();
+                 localstruct = struct();
                  
                 % ADD ALL OF THE APPROPRIATE ATTRIBUTE FIELDS
-                data_cell{j,k,n_index}.avg_ML_error = zeros(size(num_sims));
-                data_cell{j,k,n_index}.avg_MLE_q_approx_simulation = zeros(size(num_sims));
-                data_cell{j,k,n_index}.avg_approx_LL_simulation = zeros(size(num_sims));
-                data_cell{j,k,n_index}.sum_e_sample_squared = zeros(size(num_sims));
+                localstruct.avg_ML_error = zeros(size(num_sims));
+                localstruct.avg_MLE_q_approx_simulation = zeros(size(num_sims));
+                localstruct.avg_approx_LL_simulation = zeros(size(num_sims));
+                localstruct.sum_e_sample_squared = zeros(size(num_sims));
+                
+                
 
              for i=1:length(num_sims)
                  
@@ -169,39 +172,41 @@ for n_index=1:length(data_nums)
                     
                     
                     % avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)+e_sample;
-                    data_cell{j,k,n_index}.avg_ML_error(i) = data_cell{j,k,n_index}.avg_ML_error(i)+e_sample;
+                    localstruct.avg_ML_error(i) = localstruct.avg_ML_error(i)+e_sample;
 
                     
                     % avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)+q_sample;
-                    data_cell{j,k,n_index}.avg_MLE_q_approx_simulation(i) = data_cell{j,k,n_index}.avg_MLE_q_approx_simulation(i)+q_sample;
+                   localstruct.avg_MLE_q_approx_simulation(i) = localstruct.avg_MLE_q_approx_simulation(i)+q_sample;
                     
                     % avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)+LL_sample;
-                     data_cell{j,k,n_index}.avg_approx_LL_simulation(i) = data_cell{j,k,n_index}.avg_approx_LL_simulation(i)+LL_sample;
+                     localstruct.avg_approx_LL_simulation(i) = localstruct.avg_approx_LL_simulation(i)+LL_sample;
 
                     %sum_e_sample_squared(i,j,k,n_index)=sum_e_sample_squared(i,j,k,n_index) +((e_sample)^2);
-                    data_cell{j,k,n_index}.sum_e_sample_squared(i) = data_cell{j,k,n_index}.sum_e_sample_squared(i)+((e_sample)^2);
+                    localstruct.sum_e_sample_squared(i) = localstruct.sum_e_sample_squared(i)+((e_sample)^2);
                     
                     % Remember that we have to flip the LL back becaus the
                     % optimizer minimizes!
 
                 end
                 % avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)/num_samples(i);
-                data_cell{j,k,n_index}.avg_MLE_q_approx_simulation(i) = data_cell{j,k,n_index}.avg_MLE_q_approx_simulation(i)/num_samples(i);
+                localstruct.avg_MLE_q_approx_simulation(i) = localstruct.avg_MLE_q_approx_simulation(i)/num_samples(i);
                 
                 % avg_approx_LL_simulation(i,j,k,n_index)=avg_approx_LL_simulation(i,j,k,n_index)/num_samples(i);
-                data_cell{j,k,n_index}.avg_approx_LL_simulation(i) =  data_cell{j,k,n_index}.avg_approx_LL_simulation(i)/num_samples(i);
+                localstruct.avg_approx_LL_simulation(i) =  localstruct.avg_approx_LL_simulation(i)/num_samples(i);
                 
                 % avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)/num_samples(i);
-                data_cell{j,k,n_index}.avg_ML_error(i) = data_cell{j,k,n_index}.avg_ML_error(i)/num_samples(i);
+               localstruct.avg_ML_error(i) = localstruct.avg_ML_error(i)/num_samples(i);
                 
                 % not sure about this one
                 % sample_error_variance(i,j,k,n_index)=(sum_e_sample_squared(i,j,k,n_index)/num_samples(i))-((avg_ML_error(i,j,k,n_index))^2);
-                 data_cell{j,k,n_index}.sample_error_variance(i) = data_cell{j,k,n_index}.sum_e_sample_squared(i)/num_samples(i)-((data_cell{j,k,n_index}.avg_ML_error(i))^2);
+                 localstruct.sample_error_variance(i) = localstruct.sum_e_sample_squared(i)/num_samples(i)-((localstruct.avg_ML_error(i))^2);
                 
                 
                 % HERE WE ASSIGN THE STRUCT TO OUR CELL ARRAY
                 
              end
+             
+             data_cell{j,k,n_index} = localstruct; 
         end
     end
     
