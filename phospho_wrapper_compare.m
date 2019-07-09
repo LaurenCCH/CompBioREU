@@ -104,10 +104,8 @@ for n_index=1:length(data_nums)
         % Loop through our desired small probability scaling factors,
         % indexed by k, scale_small_probs(k)
         for k=1:length(scale_small_probs)
-
-             for i=1:length(num_sims)
-                 
-                % CREATE A STRUCT HERE
+            
+            % CREATE A STRUCT HERE
                  data_cell{j,k,n_index} = struct();
                  
                 % ADD ALL OF THE APPROPRIATE ATTRIBUTE FIELDS
@@ -115,6 +113,10 @@ for n_index=1:length(data_nums)
                 data_cell{j,k,n_index}.avg_MLE_q_approx_simulation = zeros(size(num_sims));
                 data_cell{j,k,n_index}.avg_approx_LL_simulation = zeros(size(num_sims));
                 data_cell{j,k,n_index}.sum_e_sample_squared = zeros(size(num_sims));
+
+             for i=1:length(num_sims)
+                 
+                
                 for num_samp_index=1:num_samples(i)
                     
                     

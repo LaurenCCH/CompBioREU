@@ -4,7 +4,7 @@ function[p,k, SSE]=convergence_rate(num_sims,avg_MLE_error)
 %reparameterizing into x and y for a linear relationship.
     
 y=log(avg_MLE_error);
-x=log(num_sims)';
+x=log(num_sims);
 params = polyfit(x,y,1);
 p=-params(1);
 c=params(2);
