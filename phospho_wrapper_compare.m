@@ -38,10 +38,10 @@ if(gofast_mode==1)
     
 else
     % This is the go slow, full mode
-    data_nums = [100,250,500, 750, 1000, 2500, 5000, 7500, 10000];
-    num_sims=(100:100:10000);
+    data_nums = [50,100,250,500,1000,10000];
+    num_sims=(50:100:10050);
     bw = [timestep*10, timestep*100];
-    scale_small_probs=[10, 25, 50, 75, 100];
+    scale_small_probs=[10, 100];
     num_samples=100*ones(size(num_sims));
 end
 
@@ -62,6 +62,14 @@ end
 % BY REPLACING IT WITH A SINGLE CELL ARRAY PREALLOCATION HERE
 data_cell = cell(length(bw),length(scale_small_probs),length(data_nums));
 
+MLE_q_numeric=zeros(size(data_nums));
+MLE_q_analytic=zeros(size(data_nums));
+mom_q=zeros(size(data_nums));
+numeric_LL=zeros(size(data_nums));
+Max_LL=zeros(size(data_nums));
+q_LL=zeros(size(data_nums));
+mom_LL=zeros(size(data_nums));
+
 for n_index=1:length(data_nums)
     n=data_nums(n_index);
  
@@ -70,8 +78,8 @@ for n_index=1:length(data_nums)
     [t]=phospho_times(q,timestep,n);
    
     % Find the analytic MLE and best loglikelihoods for the provided t.
-    MLE_q_analytic=1/mean(t);
-    Max_LL=likelihood(t,MLE_q_analytic);
+    MLE_q_analytic(n_index)=1/mean(t);
+    Max_LL(n_index)=likelihood(t,MLE_q_analytic(n_index));
    
     % We want to find the maximum loglikelihood, but our optimizer wants to
     % minimize so we wrap the function to provide our objective function.
@@ -85,11 +93,28 @@ for n_index=1:length(data_nums)
     options=optimset('MaxFunEvals',1000,'MaxIter',1000,'Display','iter');
     
     % Run the optimizer and find the numeric MLE and its associated LL.
-    [MLE_q_numeric,numeric_LL] = fmincon(negLL,q0,A,b,[],[],[],[],[],options);
+    [MLE_q_numeric(n_index),numeric_LL(n_index)] = fmincon(negLL,q0,A,b,[],[],[],[],[],options);
     
     % Recall that our objective function was flipped, so flip the result
     % back.
-    numeric_LL=-numeric_LL;
+    numeric_LL(n_index)=-numeric_LL(n_index);
+    
+    % The loglikelihood of the true parameter q
+    q_LL(n_index)=likelihood(t,q);
+
+    %the estimate of q by the method of moments
+    mom_q(n_index)=method_of_moments(t);
+    %get the loglikelihood of mom_q
+    mom_LL(n_index)=likelihood(t,mom_q(n_index));
+
+    % Prepare the domain values, q_values for which we will plot the
+    % loglikelihoods
+    q_values=(MLE_q_analytic(n_index)/2):0.01:(2*MLE_q_analytic(n_index));
+
+    % Plot and save
+    %compare_plots(MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic);
+    plot(q_values,likelihood(t,q_values));
+    %saveas(gcf,'likelihood_plot');
     
     
     
@@ -137,7 +162,7 @@ for n_index=1:length(data_nums)
                     % Do the optimization and return the simulation MLE and LL
                     [q_sample,LL_sample] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
                     LL_sample=-LL_sample;
-                    e_sample=(abs(q_sample-(MLE_q_analytic)));
+                    e_sample=(abs(q_sample-(MLE_q_analytic(n_index))));
                     
                     
                     
@@ -179,6 +204,8 @@ for n_index=1:length(data_nums)
              end
         end
     end
+    
+   
 end
 
 
@@ -191,21 +218,6 @@ end
 
 
 
-% The loglikelihood of the true parameter q
-q_LL=likelihood(t,q);
 
-%the estimate of q by the method of moments
-mom_q=method_of_moments(t);
-%get the loglikelihood of mom_q
-mom_LL=likelihood(t,mom_q);
-
-% Prepare the domain values, q_values for which we will plot the
-% loglikelihoods
-q_values=(MLE_q_analytic/2):0.01:(2*MLE_q_analytic);
-
-% Plot and save
-%compare_plots(MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic);
-plot(q_values,likelihood(t,q_values));
-%saveas(gcf,'likelihood_plot');
 end
  
