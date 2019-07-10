@@ -1,4 +1,4 @@
-function [t]=phospho_times(q,h,n)
+function [TT]=phospho_times(q,h,n)
 %This code tracks the time it takes proteins to be phosphorylated.
 %n is the number of protiens that are tracked
 %we assume the probability a protein is phosphorylated over a time step of
@@ -30,8 +30,11 @@ chunk_sizes(1:num_full_chunks)=chunk_size;
 if size_last_chunk~=0
     chunk_sizes(length(chunk_sizes))=size_last_chunk;
 end
-
-for chunk_index=1:num_chunks
+t=zeros(num_chunks,chunk_size);
+T=cell(num_chunks);
+TT=zeros(1,n);
+parfor chunk_index=1:num_chunks
+    t=zeros(1,chunk_sizes(chunk_index));
     for s=1 : chunk_sizes(chunk_index)
     %r=rand;
     i=0;
@@ -42,10 +45,15 @@ for chunk_index=1:num_chunks
     end
     t(s) = i*h;
     end
+    T{chunk_index}=t;
+end
+
+for chunk_index=1:num_chunks
+    TT(chunk_size*(chunk_index-1)+1:chunk_size*(chunk_index-1)+chunk_sizes(chunk_index))=T{chunk_index};
 end
 
 
-histogram(t,'Normalization','pdf')
+histogram(TT,'Normalization','pdf')
 hold on
 tau=0:.1:20;
 plot(tau,q.*exp(-q*tau))
