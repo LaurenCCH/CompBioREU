@@ -9,7 +9,7 @@ function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
-gofast_mode=1;
+gofast_mode=0;
 
 % Make sure that the timestep, called h in other places, is always
 % infintestimal compared to our provided value for q
@@ -39,7 +39,7 @@ if(gofast_mode==1)
 else
     % This is the go slow, full mode
     data_nums = [1000,250,50];
-    num_sims=(50:100:10000);
+    num_sims=[50 250 500 1000 2500 5000 10000];
     num_sims=fliplr(num_sims);
     bw = [timestep*10, timestep*100];
     scale_small_probs=[10, 100];
