@@ -38,8 +38,9 @@ if(gofast_mode==1)
     
 else
     % This is the go slow, full mode
-    data_nums = [50,100,250,500,1000,10000];
-    num_sims=(50:100:10050);
+    data_nums = [1000,250,50];
+    num_sims=(50:100:10000);
+    num_sims=fliplr(num_sims);
     bw = [timestep*10, timestep*100];
     scale_small_probs=[10, 100];
     num_samples=100*ones(size(num_sims));
@@ -144,7 +145,7 @@ for n_index=1:length(data_nums)
 
              for i=1:length(num_sims)
                  
-                
+               
                 for num_samp_index=1:num_samples(i)
                     
                     
