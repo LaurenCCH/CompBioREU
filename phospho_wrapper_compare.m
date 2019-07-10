@@ -43,7 +43,7 @@ else
     num_sims=fliplr(num_sims);
     bw = [timestep*10, timestep*100];
     scale_small_probs=[10, 100];
-    num_samples=100*ones(size(num_sims));
+    num_samples=10*ones(size(num_sims));
 end
 
 % WE WILL GET RID OF THIS PREALLOCATION STUFF
