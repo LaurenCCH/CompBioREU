@@ -10,7 +10,9 @@ p=-params(1);
 c=params(2);
 k=exp(c);
 y_hat=polyval([params(1),params(2)],x);
-SSE=sum((y_hat-y).^2);
+avg_MLE_error_hat=exp(y_hat);
+%SSE=sum((y_hat-y).^2);
+SSE=sum((avg_MLE_error_hat-avg_MLE_error).^2);
 
 %plot(x,y,'*',x,y_hat,'o')
 end
