@@ -1,11 +1,13 @@
-function [c,k,p] = convergence_rate_C(avg_MLE_error,num_sims)
+function[c,k,p,sse] = convergence_rate_C(avg_MLE_error,num_sims)
 
 F = @(c,k,p)error_function(avg_MLE_error,num_sims,c,k,p);
-x0=[0,1,1];
+    x0=[0,1,1];
     [x,sse] = fminsearch(F,x0);
-    x(1) = c;
-    x(2) = k;
-    x(3) = p;
+    
+    c=x(1);
+    k=x(2);
+    p=x(3);
+    
 end    
 
 function [sse] = error_function(avg_MLE_error,num_sims,c,k,p)
