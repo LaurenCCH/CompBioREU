@@ -41,7 +41,7 @@ else
     data_nums = [1000,250,50];
     num_sims=[50 250 500 750 1000 2500 5000 7500 10000];
     num_sims=fliplr(num_sims);
-    bw = [timestep*10, timestep*100];
+    bw = [timestep*2, timestep*10, timestep*100];
     scale_small_probs=[10, 100];
     num_samples=10*ones(size(num_sims));
 end
