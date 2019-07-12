@@ -9,7 +9,7 @@ function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
-gofast_mode=1;
+gofast_mode=0;
 
 % Make sure that the timestep, called h in other places, is always
 % infintestimal compared to our provided value for q
@@ -115,7 +115,7 @@ for n_index=1:length(data_nums)
         % Loop through our desired small probability scaling factors,
         % indexed by k, scale_small_probs(k)
         for k=1:length(scale_small_probs)
-            [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small_probs,bw,q0,A,b,options,t,MLE_q_analytic)
+            [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small_probs,bw,q0,A,b,options,t,MLE_q_analytic);
             data_cell{j,k,n_index} = localstruct;     
         end
     end
