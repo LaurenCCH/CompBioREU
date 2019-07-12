@@ -39,7 +39,7 @@ if(gofast_mode==1)
 else
     % This is the go slow, full mode
     data_nums = [1000,250,50];
-    num_sims=[50 250 500 1000 2500 5000 10000];
+    num_sims=[50 250 500 750 1000 2500 5000 7500 10000];
     num_sims=fliplr(num_sims);
     bw = [timestep*10, timestep*100];
     scale_small_probs=[10, 100];

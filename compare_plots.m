@@ -24,8 +24,8 @@ for i=1:length(bw)
             
             plot(fine_range_mesh, (1./(fine_range_mesh).^p)+c,'b')
             %This annotation is for convergence_rate
-            annotation('textbox','String',sprintf("p=%f\nk\\_const=%f\nSSE=%f",p_k,k_const,SSE_k),'FitBoxToText','on');
-            annotation('textbox','String',sprintf("p=%f\nc=%f\nSSE=%f",p,c,SSE_c),'FitBoxToText','on');
+            annotation('textbox','String',sprintf("p_k=%f\nk\\_const=%f\nSSE_k=%f\np=%f\nc=%f\nSSE_c=%f", p_k,k_const,SSE_k,p,c,SSE_c),'FitBoxToText','on');
+            %annotation('textbox','String',sprintf("p=%f\nc=%f\nSSE=%f",p,c,SSE_c),'FitBoxToText','on');
             legend('avg\_ML\_error','sample\_error\_variance','decay fit k','decay fit c');
         end
     end
