@@ -30,7 +30,7 @@ p_k_label=min(p_k_vector):((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)
 cm_pk=jet(length(p_k_vector));
 color_index_pk=floor(p_k_scaled*length(cm_pk(:,1)))+1;
 color_pk=cm_pk(color_index_pk,:);
-%colormap(jet(length(p_k_vector)))
+
 
 
 p_c_scaled=(p_c_vector-(min(p_c_vector)))./((max(p_c_vector)-min(p_c_vector))*(length(p_c_vector)/(length(p_c_vector)-1)));
@@ -59,9 +59,11 @@ colorbar
 h=colorbar;
 h.TickLabels=p_k_label;
 h.Ticks=p_k_label;
+h.LimitsMode='manual';
 h.Limits=[min(p_k_vector), max(p_k_vector)+((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1))];
 h.Label.String='p_k';
 h.Label.FontSize=15;
+caxis([0.0693 0.4152])
 
 
 figure
@@ -74,12 +76,12 @@ colorbar
 h=colorbar;
 h.TickLabels=p_c_label;
 h.Ticks=p_c_label;
+h.LimitsMode='manual';
 h.Limits=[min(p_c_vector), max(p_c_vector)+((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1))];
 h.Label.String='p_c';
 h.Label.FontSize=15;
+caxis([0.2119 0.9897])
 
-%label_pc=colorbar;
-%ylabel(label_pc, 'p_c')
 
 figure
 scatter3(bw_vector, scale_small_vector,data_nums_vector, 20, color_c, 'filled');
@@ -91,12 +93,12 @@ colorbar
 h=colorbar;
 h.TickLabels=c_label;
 h.Ticks=c_label;
+h.LimitsMode='manual';
 h.Limits=[min(c_vector), max(c_vector)+((max(c_vector)-min(c_vector))/(length(c_vector)-1))];
 h.Label.String='c';
 h.Label.FontSize=15;
+caxis([-0.1049 0.0665])
 
-%label_c=colorbar;
-%ylabel(label_c, 'c')
 
 end
 
