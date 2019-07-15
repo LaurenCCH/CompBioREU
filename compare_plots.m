@@ -37,8 +37,10 @@ for i=1:length(bw)
         end
     end
 end
-
+hold off
+figure
 compare_plots_3D(data_nums, scale_small_probs, bw, p_k, p_c, c);
+
 
 end
 

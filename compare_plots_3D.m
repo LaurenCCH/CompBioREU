@@ -41,9 +41,16 @@ color_index_c=floor(c_scaled*length(cm_c(:,1)))+1;
 color_c=cm_c(color_index_c,:);
 
 
+
 scatter3(bw_vector,scale_small_vector,data_nums_vector, 20, color_pk);
+colorbar
+figure
 scatter3(bw_vector, scale_small_vector,data_nums_vector, 20, color_pc);
+colorbar
+figure
 scatter3(bw_vector, scale_small_vector,data_nums_vector, 20, color_c);
+colorbar
+
 
 end
 
