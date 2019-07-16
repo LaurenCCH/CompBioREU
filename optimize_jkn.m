@@ -5,17 +5,20 @@ function [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small
 %data_cell{j,k,n_index} = struct();
 localstruct = struct();
 
+
 % ADD ALL OF THE APPROPRIATE ATTRIBUTE FIELDS
 localstruct.avg_ML_error = zeros(size(num_sims));
 localstruct.avg_MLE_q_approx_simulation = zeros(size(num_sims));
 localstruct.avg_approx_LL_simulation = zeros(size(num_sims));
 localstruct.sum_e_sample_squared = zeros(size(num_sims));
 
+
 for i=1:length(num_sims)
     avg_ML_error = 0;
     avg_MLE_q_approx_simulation = 0;
     avg_approx_LL_simulation = 0;
     sum_e_sample_squared = 0;
+ 
     parfor num_samp_index=1:num_samples(i)
 
         % Because we can underflow the probability, we need to
@@ -35,7 +38,9 @@ for i=1:length(num_sims)
 
         % avg_ML_error(i,j,k,n_index)=avg_ML_error(i,j,k,n_index)+e_sample;
         avg_ML_error = avg_ML_error+e_sample;
-
+        %Save e_samples here, make array, plot into a histogram outside loop.
+        
+        
         % avg_MLE_q_approx_simulation(i,j,k,n_index)=avg_MLE_q_approx_simulation(i,j,k,n_index)+q_sample;
         avg_MLE_q_approx_simulation = avg_MLE_q_approx_simulation+q_sample;
 
@@ -70,6 +75,6 @@ for i=1:length(num_sims)
     localstruct.sum_e_sample_squared(i) = sum_e_sample_squared;
     localstruct.sample_error_variance(i) = sample_error_variance;
 end
-
+%histogram
 
 end
