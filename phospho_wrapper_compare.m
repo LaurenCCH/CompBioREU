@@ -9,7 +9,7 @@ function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
-gofast_mode=0;
+gofast_mode=1;
 
 % Make sure that the timestep, called h in other places, is always
 % infintestimal compared to our provided value for q
@@ -34,7 +34,7 @@ if(gofast_mode==1)
     scale_small_probs=[10, 100];
     
     %num_samples=ceil(10000./num_sims);
-    num_samples=10*ones(size(num_sims));
+    num_samples=10;
     
 else
     % This is the go slow, full mode
@@ -43,7 +43,7 @@ else
     num_sims=fliplr(num_sims);
     bw = [timestep*2, timestep*5, timestep*10,timestep*20, timestep*30, timestep*40,timestep*50, timestep*60, timestep*70, timestep*80, timestep*90, timestep*100];
     scale_small_probs=[10,20, 30, 40, 50, 60, 70, 80, 90 100];
-    num_samples=10*ones(size(num_sims));
+    num_samples=10;
 end
 
 
@@ -96,12 +96,15 @@ for n_index=1:length(data_nums)
 
     % Prepare the domain values, q_values for which we will plot the
     % loglikelihoods
-    q_values=(MLE_q_analytic(n_index)/2):0.01:(2*MLE_q_analytic(n_index));
+    
+    %q_values=(MLE_q_analytic(n_index)/2):0.01:(2*MLE_q_analytic(n_index));
 
     % Plot and save
     %compare_plots(MLE_q_approx_simulation,num_sims,data_nums, bw, scale_small_probs,MLE_q_analytic);
-    plot(q_values,likelihood(t,q_values));
+    
+    %plot(q_values,likelihood(t,q_values));
     %saveas(gcf,'likelihood_plot');
+    
     
     % Loop through our desired number of simulations, indexed by i,
     % num_sims(i)

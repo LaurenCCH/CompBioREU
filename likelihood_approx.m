@@ -15,7 +15,8 @@ function [log_liklihood_t_values, t_prb] = likelihood_approx(t,q0,num_sims,bw,de
 
 %This code creates a histogram and then takes the bin counts and turns
 %them into probabilities
-histogram(t_sim,'BinWidth', bw,'Normalization','pdf')
+
+%histogram(t_sim,'BinWidth', bw,'Normalization','pdf')
 
 %This code take the bin counts and turns them into probabilities
 [bin_prb,edges] = histcounts(t_sim,'BinWidth', bw,'Normalization', 'probability');

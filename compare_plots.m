@@ -32,8 +32,11 @@ for i=1:length(bw)
             %annotation('textbox','String',sprintf("p=%f\nc=%f\nSSE=%f",p,c,SSE_c),'FitBoxToText','on');
             legend('avg\_ML\_error','sample\_error\_variance','decay fit k','decay fit c');
             
+            hold off
+            figure
             
-          
+            %histogram(data_cell{i,j,k}.e_sample_matrix,'BinWidth',0.015)
+            sample_error_plot(data_cell{i,j,k}.e_sample_matrix)
         end
     end
 end
@@ -41,6 +44,7 @@ hold off
 figure
 compare_plots_3D(data_nums, scale_small_probs, bw, p_k, p_c, c);
 
+          
 
 end
 
