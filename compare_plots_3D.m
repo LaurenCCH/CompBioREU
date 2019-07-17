@@ -57,7 +57,7 @@ zlabel('Number of Data Points')
 colormap(cm_pk)
 colorbar
 h=colorbar;
-h.TickLabels=p_k_label;
+h.TickLabels=round(p_k_label, 2);
 h.Ticks=p_k_label;
 h.LimitsMode='manual';
 h.Limits=[min(p_k_vector), max(p_k_vector)+((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1))];
@@ -74,7 +74,7 @@ zlabel('Number of Data Points')
 colormap(cm_pc)
 colorbar
 h=colorbar;
-h.TickLabels=p_c_label;
+h.TickLabels=round(p_c_label, 2);
 h.Ticks=p_c_label;
 h.LimitsMode='manual';
 h.Limits=[min(p_c_vector), max(p_c_vector)+((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1))];
@@ -91,7 +91,7 @@ zlabel('Number of Data Points')
 colormap(cm_c)
 colorbar
 h=colorbar;
-h.TickLabels=c_label;
+h.TickLabels=round(c_label, 2);
 h.Ticks=c_label;
 h.LimitsMode='manual';
 h.Limits=[min(c_vector), max(c_vector)+((max(c_vector)-min(c_vector))/(length(c_vector)-1))];
