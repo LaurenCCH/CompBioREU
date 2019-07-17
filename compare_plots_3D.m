@@ -26,7 +26,7 @@ data_nums_vector=reshape(data_nums_matrix, [1,length(data_nums)*length(scale_sma
 
 
 p_k_scaled=(p_k_vector-(min(p_k_vector)))./((max(p_k_vector)-min(p_k_vector))*(length(p_k_vector)/(length(p_k_vector)-1)));
-p_k_label=min(p_k_vector):((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1)):max(p_k_vector)+((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1));
+p_k_label=min(p_k_vector):(((max(p_k_vector)+((max(p_k_vector)-min(p_k_vector)))/(length(p_k_vector)-1))-min(p_k_vector))/10):max(p_k_vector)+((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1));
 cm_pk=jet(length(p_k_vector));
 color_index_pk=floor(p_k_scaled*length(cm_pk(:,1)))+1;
 color_pk=cm_pk(color_index_pk,:);
@@ -35,7 +35,7 @@ color_pk=cm_pk(color_index_pk,:);
 
 p_c_scaled=(p_c_vector-(min(p_c_vector)))./((max(p_c_vector)-min(p_c_vector))*(length(p_c_vector)/(length(p_c_vector)-1)));
 cm_pc=jet(length(p_c_vector));
-p_c_label=min(p_c_vector):((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1)):max(p_c_vector)+((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1));
+p_c_label=min(p_c_vector):(((max(p_c_vector)+((max(p_c_vector)-min(p_c_vector)))/(length(p_c_vector)-1))-min(p_c_vector))/10):max(p_c_vector)+((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1));
 color_index_pc=floor(p_c_scaled*length(cm_pc(:,1)))+1;
 color_pc=cm_pc(color_index_pc,:);
 
@@ -43,7 +43,7 @@ color_pc=cm_pc(color_index_pc,:);
 
 c_scaled=(c_vector-(min(c_vector)))./((max(c_vector)-min(c_vector))*(length(c_vector)/(length(c_vector)-1)));
 cm_c=jet(length(c_vector));
-c_label=min(c_vector):((max(c_vector)-min(c_vector))/(length(c_vector)-1)):max(c_vector)+((max(c_vector)-min(c_vector))/(length(c_vector)-1));
+c_label=min(c_vector):(((max(c_vector)+((max(c_vector)-min(c_vector)))/(length(c_vector)-1))-min(c_vector))/10):max(c_vector)+((max(c_vector)-min(c_vector))/(length(c_vector)-1));
 
 color_index_c=floor(c_scaled*length(cm_c(:,1)))+1;
 color_c=cm_c(color_index_c,:);
@@ -63,7 +63,7 @@ h.LimitsMode='manual';
 h.Limits=[min(p_k_vector), max(p_k_vector)+((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1))];
 h.Label.String='p_k';
 h.Label.FontSize=15;
-caxis([0.0693 0.4152])
+caxis([min(p_k_vector), max(p_k_vector)+((max(p_k_vector)-min(p_k_vector))/(length(p_k_vector)-1))])
 
 
 figure
@@ -80,7 +80,7 @@ h.LimitsMode='manual';
 h.Limits=[min(p_c_vector), max(p_c_vector)+((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1))];
 h.Label.String='p_c';
 h.Label.FontSize=15;
-caxis([0.2119 0.9897])
+caxis([min(p_c_vector), max(p_c_vector)+((max(p_c_vector)-min(p_c_vector))/(length(p_c_vector)-1))])
 
 
 figure
@@ -91,13 +91,13 @@ zlabel('Number of Data Points')
 colormap(cm_c)
 colorbar
 h=colorbar;
-h.TickLabels=round(c_label, 2);
+h.TickLabels=round(c_label, 3);
 h.Ticks=c_label;
 h.LimitsMode='manual';
 h.Limits=[min(c_vector), max(c_vector)+((max(c_vector)-min(c_vector))/(length(c_vector)-1))];
 h.Label.String='c';
 h.Label.FontSize=15;
-caxis([-0.1049 0.0665])
+caxis([min(c_vector), max(c_vector)+((max(c_vector)-min(c_vector))/(length(c_vector)-1))])
 
 
 end

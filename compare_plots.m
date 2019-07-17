@@ -36,7 +36,9 @@ for i=1:length(bw)
             figure
             
             for num_sims_index=1:length(num_sims)    
-                sample_error_plot(data_cell{i,j,k}.e_sample_matrix(num_sims_index, :),data_nums(k),bw(i),scale_small_probs(j), num_sims(num_sims_index));
+                if num_sims_index==1 || num_sims_index==length(num_sims)||num_sims_index==ceil(length(num_sims)/2)
+                    sample_error_plot(data_cell{i,j,k}.e_sample_matrix(num_sims_index, :),data_nums(k),bw(i),scale_small_probs(j), num_sims(num_sims_index));
+                end
             hold off
             figure
             
