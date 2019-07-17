@@ -34,7 +34,7 @@ if(gofast_mode==1)
     scale_small_probs=[10, 100];
     
     %num_samples=ceil(10000./num_sims);
-    num_samples=50;
+    num_samples=10;
     
 else
     % This is the go slow, full mode
@@ -69,7 +69,7 @@ for n_index=1:length(data_nums)
     % this function returns the first phosphoralations times, t,  with n trials.
     % q represets the rate of phosphoralations.
     [t]=phospho_times(q,timestep,n);
-   
+    
     % Find the analytic MLE and best loglikelihoods for the provided t.
     MLE_q_analytic(n_index)=1/mean(t);
     Max_LL(n_index)=likelihood(t,MLE_q_analytic(n_index));

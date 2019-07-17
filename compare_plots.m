@@ -1,4 +1,4 @@
-function[]=compare_plots(num_sims,data_nums, bw, scale_small_probs,data_cell)
+function[]=compare_plots(num_sims,data_nums, bw, scale_small_probs,data_cell,MLE_q_analytic)
 %This function loops over ordered triples (data_nums,bw,scale_small_probs)and
 %plots num_sims verusus abs(MLE_q_approx_simulation-MLE_q_analytic).
 p_k=zeros(length(bw),length(scale_small_probs),length(data_nums));
@@ -34,13 +34,23 @@ for i=1:length(bw)
             
             hold off
             figure
+            plot(num_sims,((data_cell{i,j,k}.avg_MLE_q_approx_simulation)-MLE_q_analytic(k)),'*')
+            
+            
+            
+            
+            
+            hold off
+           
             
             for num_sims_index=1:length(num_sims)    
                 if num_sims_index==1 || num_sims_index==length(num_sims)||num_sims_index==ceil(length(num_sims)/2)
-                    sample_error_plot(data_cell{i,j,k}.e_sample_matrix(num_sims_index, :),data_nums(k),bw(i),scale_small_probs(j), num_sims(num_sims_index));
+%                     %sample_error_plot(data_cell{i,j,k}.e_sample_matrix(num_sims_index, :),data_nums(k),bw(i),scale_small_probs(j), num_sims(num_sims_index));
+                        figure
+                        histogram((data_cell{i,j,k}.q_sample_matrix(num_sims_index, :)-MLE_q_analytic(k)), 10);
                 end
             hold off
-            figure
+          
             
             end
             

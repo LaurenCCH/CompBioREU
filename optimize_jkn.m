@@ -12,7 +12,7 @@ localstruct.avg_MLE_q_approx_simulation = zeros(size(num_sims));
 localstruct.avg_approx_LL_simulation = zeros(size(num_sims));
 localstruct.sum_e_sample_squared = zeros(size(num_sims));
 localstruct.e_sample_matrix = zeros(length(num_sims),num_samples);
-
+localstruct.q_sample_matrix = zeros(length(num_sims),num_samples);
 
 
 for i=1:length(num_sims)
@@ -21,6 +21,8 @@ for i=1:length(num_sims)
     avg_approx_LL_simulation = 0;
     sum_e_sample_squared = 0;
     e_sample_vector=zeros(1, num_samples);
+    q_sample_vector=zeros(1, num_samples);
+    
     parfor num_samp_index=1:num_samples
 
         % Because we can underflow the probability, we need to
@@ -35,6 +37,7 @@ for i=1:length(num_sims)
 
         % Do the optimization and return the simulation MLE and LL
         [q_sample,LL_sample] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);
+        q_sample_vector(num_samp_index)=q_sample;
         LL_sample=-LL_sample;
         e_sample=(abs(q_sample-(MLE_q_analytic(n_index))));
         e_sample_vector(num_samp_index)=e_sample;
@@ -77,6 +80,7 @@ for i=1:length(num_sims)
     localstruct.sum_e_sample_squared(i) = sum_e_sample_squared;
     localstruct.sample_error_variance(i) = sample_error_variance;
     localstruct.e_sample_matrix(i,:)=e_sample_vector;
+    localstruct.q_sample_matrix(i,:)=q_sample_vector;
 end
 %histogram
 

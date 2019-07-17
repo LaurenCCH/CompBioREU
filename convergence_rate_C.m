@@ -1,7 +1,7 @@
 function[c,p,sse] = convergence_rate_C(avg_MLE_error,num_sims)
 
 F = @(x)error_function(avg_MLE_error,num_sims,x);
-    x0=[0,1,1];
+    x0=[0,1];
     
     [x,sse] = fmincon(F,x0,[],[],[],[],[0, -Inf],[Inf, Inf]);
     

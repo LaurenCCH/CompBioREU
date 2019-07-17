@@ -8,10 +8,11 @@ function [log_liklihood_t_values, t_prb] = likelihood_approx(t,q0,num_sims,bw,de
 %the process with parameter q0 num_sims times.  In so doing, some elements
 %of t may not be observed.  The probability of these elemets is set to
 %degenerate_probability. 
+timestep=1/(q0*100);
 
 % call phospho_times to generate data t_sim, by simulating the process with
 % parameter q.
-[t_sim] = phospho_times(q0,.01,num_sims);
+[t_sim] = phospho_times(q0,timestep,num_sims);
 
 %This code creates a histogram and then takes the bin counts and turns
 %them into probabilities
