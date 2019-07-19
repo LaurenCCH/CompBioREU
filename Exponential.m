@@ -1,10 +1,7 @@
-function[density] = Exponential(sim_data, exp_data_i, cv)
+function[density] = Exponential(sim_data_j, exp_data_i,cv)
 
-bin_width = cv*exp((-1/cv)*x);
-density = 0;
+Gamma = (1/sim_data_j);
+density = Gamma * exp(-Gamma * exp_data_i);
 
-if abs(sim_data-exp_data_i)<bin_width
-    density = 1/bin_width;
-    
-end 
+
 end 

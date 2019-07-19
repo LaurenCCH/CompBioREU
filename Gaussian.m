@@ -1,12 +1,8 @@
 
 
-function[density] = Gaussian(sim_data, exp_data_i, cv)
+function[density] = Gaussian(sim_data_j, exp_data_i, cv)
 
-bin_width = (cv/('\mu'))*sqrt(pi*2);
-density = 0;
+sigma = (cv/sim_data_j);
+density = (1/sigma*sqrt(pi*2)) * exp(-((exp_data_i-sim_data_j)^2)/(2*sigma^2)); 
 
-if abs(sim_data-exp_data_i)<bin_width
-    density = (1/bin_width) * exp(1/2*((x-('\mu')/(cv/('\mu'))))^2); 
-    
-end 
 end 
