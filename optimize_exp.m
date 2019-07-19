@@ -27,7 +27,9 @@ for i=1:length(num_sims)
 
         % Prepare our objective function for optimization
         %negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),degenerate_probability);
-        negLL_approx=@(q)-1*approx_likelihood_kernel(t,num_sims(i),q,degenerate_probability, 1);
+        %the final two arguments representing degenerate_probability and bw
+        %are not used with the exponential kernel
+        negLL_approx=@(q)-1*approx_likelihood_kernel(t,num_sims(i),q,realmin, 1,'exp');
 
         % Do the optimization and return the simulation MLE and LL
         [q_sample,LL_sample] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);

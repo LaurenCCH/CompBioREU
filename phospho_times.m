@@ -16,7 +16,7 @@ t=zeros(1,n);
 m=1;
 for s=1 : n
     %r=rand;
-    i=0;
+    i=1;
     %while rand > p(q,h,m)
     while rand > q*h
         i=i+1;

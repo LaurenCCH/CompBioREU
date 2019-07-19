@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_nums,bw,scale_small_probs,num_sims,data_cell] = phospho_wrapper_compare(q)
+function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_nums,bw,scale_small_probs,num_sims,data_cell] = phospho_wrapper_compare(q,bin_type)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
@@ -9,6 +9,9 @@ function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_
 % Max_LL is the log likelihood of MLE_q_true
 % q_LL is the log likelihood of q
 
+%bin_type is either 'MAT' or 'on_data'.  For 'MAT' bins are chosen by
+%histogram.m. For 'on_data' the bins are centered on the data using the
+%kernel defined in I.m
 gofast_mode=1;
 
 % Make sure that the timestep, called h in other places, is always
@@ -124,7 +127,7 @@ for n_index=1:length(data_nums)
         % Loop through our desired small probability scaling factors,
         % indexed by k, scale_small_probs(k)
         for k=1:length(scale_small_probs)
-            [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small_probs,bw,q0,A,b,options,t,MLE_q_analytic);
+            [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small_probs,bw,q0,A,b,options,t,MLE_q_analytic,bin_type);
             data_cell{j,k,n_index} = localstruct;     
         end
     end

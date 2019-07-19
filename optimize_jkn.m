@@ -1,4 +1,4 @@
-function [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small_probs,bw,q0,A,b,options,t,MLE_q_analytic)
+function [localstruct]=optimize_jkn(j,k,n_index,num_sims,num_samples,scale_small_probs,bw,q0,A,b,options,t,MLE_q_analytic,bin_type)
 
 
 % CREATE A STRUCT HERE
@@ -33,8 +33,12 @@ for i=1:length(num_sims)
         degenerate_probability = 1/(num_sims(i)*scale_small_probs(k));
 
         % Prepare our objective function for optimization
-        %negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),degenerate_probability);
-        negLL_approx=@(q)-1*approx_likelihood_kernel(t,num_sims(i),q,degenerate_probability, bw(j));
+        if strcmp(bin_type,'MAT')
+        negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),degenerate_probability);
+        end
+        if strcmp(bin_type,'on_data')
+        negLL_approx=@(q)-1*approx_likelihood_kernel(t,num_sims(i),q,degenerate_probability, bw(j), 'indicator');
+        end
 
         % Do the optimization and return the simulation MLE and LL
         [q_sample,LL_sample] = fmincon(negLL_approx,q0,A,b,[],[],[],[],[],options);

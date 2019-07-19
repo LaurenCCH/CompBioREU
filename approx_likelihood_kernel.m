@@ -4,7 +4,17 @@ function[LL] = approx_likelihood_kernel(data, num_sims, q_hat,degenerate_prob, b
 %pdf based on the kernel provided by I. We calculate the LL of the given
 %data provided the approximate pdf.
 if strcmp(kernel_type,'exp')==1
-    kernel_function=@()
+    %the final argument represents cv and is unused for this kernel
+    kernel_function=@(sim_data_j,exp_data_i,cv)Exponential(sim_data_j, exp_data_i,cv);
+end
+if strcmp(kernel_type,'indicator')==1
+    %the final argument represents cv and is unused for this kernel
+    kernel_function=@(sim_data_j,exp_data_i,cv)I(sim_data_j, exp_data_i,cv);
+end
+if strcmp(kernel_type,'gaussian')==1
+    %the final argument represents cv and is unused for this kernel
+    kernel_function=@(sim_data_j,exp_data_i,cv)Gaussian(sim_data_j, exp_data_i,cv);
+end
 %For simulating the continous stochastic process we choose the time step to
 %be small relative to the occurrence rate, q.
 h = 1/(q_hat*100);
@@ -19,7 +29,7 @@ for data_index=1:length(data)
     %density each kernel contributes to pdf_value(data_index). These values
     %sum to give the final pdf_value(data_index).
     for sim_data_index=1:num_sims
-        pdf_value(data_index) = pdf_value(data_index)+kernel_funtion(sim_data(sim_data_index), data(data_index), cv);
+        pdf_value(data_index) = pdf_value(data_index)+kernel_function(sim_data(sim_data_index), data(data_index), cv);
     end
     pdf_value(data_index)=pdf_value(data_index)/(num_sims);
     if pdf_value(data_index)==0

@@ -1,4 +1,4 @@
-function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_nums,bw,scale_small_probs,num_sims,data_cell] = phospho_wrapper_compare_exp(q)
+function [MLE_q_numeric,MLE_q_analytic,mom_q,numeric_LL,Max_LL,q_LL,mom_LL,data_nums,num_sims,data_cell] = phospho_wrapper_compare_exp(q)
 %generate a set of synthetic data (t) for the first event (phosphorylation) 
 %times for a Poisson process, given the provided rate, q, 
 % and over a provided number of trials, n, and calculate the analytic MLE
