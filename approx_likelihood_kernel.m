@@ -1,9 +1,10 @@
-function[LL] = approx_likelihood_kernel(data, num_sims, q_hat,degenerate_prob, bw)
+function[LL] = approx_likelihood_kernel(data, num_sims, q_hat,degenerate_prob, bw,kernel_type)
 %This code approximates the log likelihood of given data (data).  
 %Specifically, we use simulated data (sim_data) to generate an approximate 
 %pdf based on the kernel provided by I. We calculate the LL of the given
 %data provided the approximate pdf.
-
+if strcmp(kernel_type,'exp')==1
+    kernel_function=@()
 %For simulating the continous stochastic process we choose the time step to
 %be small relative to the occurrence rate, q.
 h = 1/(q_hat*100);
@@ -18,7 +19,7 @@ for data_index=1:length(data)
     %density each kernel contributes to pdf_value(data_index). These values
     %sum to give the final pdf_value(data_index).
     for sim_data_index=1:num_sims
-        pdf_value(data_index) = pdf_value(data_index)+I(sim_data(sim_data_index), data(data_index), cv);
+        pdf_value(data_index) = pdf_value(data_index)+kernel_funtion(sim_data(sim_data_index), data(data_index), cv);
     end
     pdf_value(data_index)=pdf_value(data_index)/(num_sims);
     if pdf_value(data_index)==0

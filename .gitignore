@@ -4,6 +4,11 @@
 # Don't include figures
 *.fig
 
+# Don't include jpegs
+*.jpg
+
+# Also ignore zip files
+*.zip
 
 # Windows default autosave extension
 *.asv

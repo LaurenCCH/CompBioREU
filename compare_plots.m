@@ -35,19 +35,27 @@ for i=1:length(bw)
             hold off
             figure
             plot(num_sims,((data_cell{i,j,k}.avg_MLE_q_approx_simulation)-MLE_q_analytic(k)),'*')
-            
-            
-            
-            
-            
+            %ADD LABELS
+            xlabel('Number of simulations');
+            ylabel('avg_MLE_q_approx_simulation-MLE_q-analytic');
+            annotation('textbox','String',sprintf("data\\_nums=%f\nbw=%f\nscale\\_small\\_probs=%f", data_nums(k),bw(i), scale_small_probs(j)),'FitBoxToText','on');
+           
             hold off
            
             
             for num_sims_index=1:length(num_sims)    
                 if num_sims_index==1 || num_sims_index==length(num_sims)||num_sims_index==ceil(length(num_sims)/2)
-%                     %sample_error_plot(data_cell{i,j,k}.e_sample_matrix(num_sims_index, :),data_nums(k),bw(i),scale_small_probs(j), num_sims(num_sims_index));
+                        sample_error_plot(data_cell{i,j,k}.e_sample_matrix(num_sims_index, :),data_nums(k),bw(i),scale_small_probs(j), num_sims(num_sims_index));
+                        
+                        hold off
+               
                         figure
                         histogram((data_cell{i,j,k}.q_sample_matrix(num_sims_index, :)-MLE_q_analytic(k)), 10);
+            
+                        xlabel('Approximate MLE of q - MLE of q');
+                        ylabel('Frequency')
+                        annotation('textbox','String',sprintf("data\\_nums=%f\nbw=%f\nscale\\_small\\_probs=%f", data_nums(k),bw(i), scale_small_probs(j)), 'Position', [.5, .7, .4, .2],'FitBoxToText','on');
+           
                 end
             hold off
           
