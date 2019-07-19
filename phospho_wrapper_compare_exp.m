@@ -39,7 +39,7 @@ else
     data_nums = [1000,500, 250,100, 50];
     num_sims=[50 250 500 750 1000 2500 5000 7500 10000];
     num_sims=fliplr(num_sims);
-    num_samples=10;
+    num_samples=50;
 end
 
 
