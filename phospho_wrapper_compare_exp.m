@@ -111,6 +111,9 @@ for n_index=1:length(data_nums)
             data_cell{n_index} = localstruct;     
         
 end
+current_timestamp=tic;
+filename = sprintf("phospho_wrapper_compare_exp_output_%s_%s.mat",string(current_timestamp));
 
+save(filename)
 end
  

@@ -40,19 +40,19 @@ if(gofast_mode==1)
     num_samples=10;
     
 else
-    % This is the go slow, full mode
+    %This is the go slow, full mode
+    data_nums = [1000,500,250,100, 50];
+    num_sims=[50 250 500 750 1000 2500 5000 7500 10000];
+    num_sims=fliplr(num_sims);
+    bw = [timestep*2,timestep*10,timestep*20,timestep*50,timestep*100];
+    scale_small_probs=[10 25 50 75 100];
+    num_samples=50;
 %     data_nums = [1000,500, 250,100, 50];
 %     num_sims=[50 250 500 750 1000 2500 5000 7500 10000];
 %     num_sims=fliplr(num_sims);
-%     bw = [timestep*2, timestep*5, timestep*10,timestep*20, timestep*30, timestep*40,timestep*50, timestep*60, timestep*70, timestep*80, timestep*90, timestep*100];
-%     scale_small_probs=[10,20, 30, 40, 50, 60, 70, 80, 90 100];
-%     num_samples=50;
-    data_nums = [1000,500, 250,100, 50];
-    num_sims=[50 250 500 750 1000 2500 5000 7500 10000];
-    num_sims=fliplr(num_sims);
-    bw = [timestep*2, timestep*10, timestep*100];
-    scale_small_probs=[10,100];
-    num_samples=10;
+%     bw = [timestep*2, timestep*10, timestep*100];
+%     scale_small_probs=[10,100];
+%     num_samples=10;
 end
 
 
@@ -133,5 +133,9 @@ for n_index=1:length(data_nums)
     end
 end
 
+current_timestamp=tic;
+filename = sprintf("phospho_wrapper_compare_output_%s_%s.mat",string(current_timestamp),bin_type);
+
+save(filename)
 end
  
