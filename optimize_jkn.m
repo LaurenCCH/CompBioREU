@@ -36,8 +36,11 @@ for i=1:length(num_sims)
         if strcmp(bin_type,'MAT')
         negLL_approx=@(q)-1*likelihood_approx(t,q,num_sims(i),bw(j),degenerate_probability);
         end
-        if strcmp(bin_type,'on_data')
+        if strcmp(bin_type,'variable_width_centered_window')
         negLL_approx=@(q)-1*approx_likelihood_kernel(t,num_sims(i),q,degenerate_probability, bw(j), 'indicator');
+        end
+        if strcmp(bin_type,'fixed_width_centered_window')
+        negLL_approx=@(q)-1*approx_likelihood_kernel(t,num_sims(i),q,degenerate_probability, bw(j), 'fixed_width_centered_window');
         end
 
         % Do the optimization and return the simulation MLE and LL
