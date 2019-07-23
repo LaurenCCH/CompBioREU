@@ -36,7 +36,7 @@ p_c=zeros(length(data_nums));
             plot(num_sims,((data_cell{k}.avg_MLE_q_approx_simulation)-MLE_q_analytic(k)),'*')
             %ADD LABELS
             xlabel('Number of simulations');
-            ylabel('Approximate MLE of q - MLE of q');
+            ylabel('Average approximate MLE of q - MLE of q');
             annotation('textbox','String',sprintf("data\\_nums=%f", data_nums(k)),'FitBoxToText','on');
            
             hold off

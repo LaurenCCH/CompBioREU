@@ -12,7 +12,7 @@ density=0;
 %if exp_data_i falls into the bin the density of the kernel at exp_data_i
 %is the height of the bin, 1/bin_width. Otherwise, the density of the
 %kernel at exp_data_i is 0.
-if abs(sim_data-exp_data_i)<bin_width
+if abs(sim_data-exp_data_i)<(bin_width/2)
     density=1/bin_width;
 end
 end
