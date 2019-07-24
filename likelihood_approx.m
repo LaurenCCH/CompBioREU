@@ -10,6 +10,9 @@ function [log_liklihood_t_values, t_prb] = likelihood_approx(t,q0,num_sims,bw,de
 %degenerate_probability. 
 timestep=1/(q0*100);
 
+
+SANITY_CHECKING_PLOT=1;
+
 % call phospho_times to generate data t_sim, by simulating the process with
 % parameter q.
 [t_sim] = phospho_times(q0,timestep,num_sims);
@@ -28,6 +31,12 @@ bin_h = bin_prb./bw;
 
 %This initializes a vector, list_probs, with zeros
 t_prb=zeros(1,length(t));
+
+
+if SANITY_CHECKING_PLOT
+    figure;
+    hold on;
+end
 
 %This loop iterates through the vector of sorted times, t_1, and 
 %sorts each time into the proper bin and thus assigns it the corresponding
@@ -54,6 +63,25 @@ for d=1:length(t)
         t_prb(d) = bin_h(bin_index_t);
         
     end
+end
+
+if SANITY_CHECKING_PLOT
+    title('Likelihood scatter')
+    x_grid=0:0.01:max(t_sim)+bw;
+    plot(x_grid, Exponential(2, x_grid,42),'k');
+    plot(t,t_prb,'b*')
+
+    
+    plot(t_sim,ones(1,length(t_sim)),'r*');
+
+    histogram(t_sim,'BinWidth', bw,'Normalization','pdf')
+    
+    
+    legend('true pdf', 'approximate pdf evaluated at data','simulated data', 'uniform kernels on simulated data');
+
+    disp("HEYO WE WANT TO BREAK HERE")
+%     dbstop
+% 
 end
        
 %This loop assigns a degenarte probability to every probability of zero to
