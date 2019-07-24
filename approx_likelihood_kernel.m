@@ -5,7 +5,7 @@ function[LL] = approx_likelihood_kernel(data, num_sims, q_hat,degenerate_prob, b
 %data provided the approximate pdf.
 
 
-SANITY_CHECKING_PLOT=0;
+SANITY_CHECKING_PLOT=1;
 
 
 
@@ -37,10 +37,10 @@ cv=.5;
 pdf_value=zeros(1,length(data));
 %loop through data values to get corresponding approximate pdf values
 
-% if SANITY_CHECKING_PLOT
-%     figure;
-%     hold on;
-% end
+if SANITY_CHECKING_PLOT
+    figure;
+    hold on;
+end
 
 for data_index=1:length(data)
     %loop through the kernels centered on the simulated data to find the
@@ -61,31 +61,34 @@ for data_index=1:length(data)
     
 end
 
-% if SANITY_CHECKING_PLOT
-%     title('Likelihood scatter')
-%     x_grid=0:0.01:max(data);
-%     plot(x_grid, Exponential(2, x_grid,42),'k');
-% 
-%     plot(sim_data,1,'r*');
-% 
-% 
-%     %for sim_data_index=1:1
-%     for sim_data_index=1:num_sims
-% 
-%         this_kernel = zeros(1,length(x_grid));
-%         for x_grid_point_idx=1:length(x_grid)
-%            x_grid_point = x_grid(x_grid_point_idx);
-%            %this_kernel(x_grid_point_idx) = kernel_function(0.5,x_grid_point,cv);
-%            this_kernel(x_grid_point_idx) = kernel_function(sim_data(sim_data_index),x_grid_point,cv);
-%         end
-% 
-%         plot(x_grid, this_kernel,'g');
-%     end
-% 
-%     disp("HEYO WE WANT TO BREAK HERE")
+if SANITY_CHECKING_PLOT
+    title('Likelihood scatter')
+    x_grid=0:0.01:max(sim_data)+bw;
+    plot(x_grid, Exponential(2, x_grid,42),'k');
+    plot(data,pdf_value,'b*')
+
+    plot(sim_data,ones(1,length(sim_data)),'r*');
+
+
+    %for sim_data_index=1:1
+    for sim_data_index=1:num_sims
+
+        this_kernel = zeros(1,length(x_grid));
+        for x_grid_point_idx=1:length(x_grid)
+           x_grid_point = x_grid(x_grid_point_idx);
+           %this_kernel(x_grid_point_idx) = kernel_function(0.5,x_grid_point,cv);
+           this_kernel(x_grid_point_idx) = kernel_function(sim_data(sim_data_index),x_grid_point,cv);
+        end
+
+        plot(x_grid, this_kernel,'g');
+    end
+    
+    legend('true pdf', 'approximate pdf evaluated at data','simulated data', 'uniform kernels on simulated data');
+
+    disp("HEYO WE WANT TO BREAK HERE")
 %     dbstop
 % 
-% end
+end
 
 
 LL=sum(log(pdf_value));
